@@ -7,107 +7,138 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <title>Secure Online Exam Portal</title>
+    <link rel="icon" type="image/png" href="https://png.pngtree.com/png-clipart/20250110/original/pngtree-admin-png-image_4789300.png">
+    
     <style>
         body { font-family: 'Hind Siliguri', sans-serif; user-select: none; }
         .glass { backdrop-filter: blur(20px); background: rgba(255, 255, 255, 0.7); }
         .custom-scroll::-webkit-scrollbar { width: 5px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
         marquee { border-radius: 10px; }
+        
+        /* Header/Footer specific styles */
+        header { border-bottom: 1px solid rgba(255,255,255,0.3); }
+        footer { border-top: 1px solid rgba(255,255,255,0.3); }
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-indigo-200 via-blue-100 to-purple-200 min-h-screen p-4 md:p-8" oncontextmenu="return false" oncopy="return false" onpaste="return false">
+<body class="bg-gradient-to-br from-indigo-200 via-blue-100 to-purple-200 min-h-screen flex flex-col" oncontextmenu="return false" oncopy="return false" onpaste="return false">
 
-    <div id="custom-popup" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-        <div class="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl border-t-8 border-indigo-600">
-            <div id="popup-icon" class="text-6xl mb-4">📢</div>
-            <p id="popup-msg" class="text-gray-700 mb-6 font-bold text-lg"></p>
-            <button onclick="closePopup()" class="bg-indigo-600 text-white px-10 py-3 rounded-2xl font-bold shadow-lg hover:bg-indigo-700 transition">ঠিক আছে</button>
+    <header class="glass sticky top-0 z-50 px-6 py-4 mb-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="https://png.pngtree.com/png-clipart/20250110/original/pngtree-admin-png-image_4789300.png" alt="Logo" class="w-10 h-10">
+                <span class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">রাসেল ইসলাম একাডেমি</span>
+            </div>
+            <div class="hidden md:flex items-center gap-6 text-gray-600 font-medium">
+                <span class="hover:text-indigo-600 cursor-pointer transition">হোম</span>
+                <span class="hover:text-indigo-600 cursor-pointer transition">নির্দেশনা</span>
+                <span class="hover:text-indigo-600 cursor-pointer transition">যোগাযোগ</span>
+            </div>
         </div>
-    </div>
-
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8">
-        
-        <div class="lg:col-span-1">
-            <div class="glass p-6 rounded-3xl shadow-xl border border-white/40 sticky top-8">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">🏆 লিডারবোর্ড</h2>
-                <div id="leaderboard-list" class="space-y-3 max-h-[500px] overflow-y-auto custom-scroll pr-2">
-                    <p class="text-gray-400 text-sm italic text-center">লোড হচ্ছে...</p>
-                </div>
+    </header>
+    <main class="flex-grow p-4 md:p-8">
+        <div id="custom-popup" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div class="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl border-t-8 border-indigo-600">
+                <div id="popup-icon" class="text-6xl mb-4">📢</div>
+                <p id="popup-msg" class="text-gray-700 mb-6 font-bold text-lg"></p>
+                <button onclick="closePopup()" class="bg-indigo-600 text-white px-10 py-3 rounded-2xl font-bold shadow-lg hover:bg-indigo-700 transition">ঠিক আছে</button>
             </div>
         </div>
 
-        <div class="lg:col-span-3">
-            <div class="glass p-6 md:p-10 rounded-3xl shadow-2xl border border-white/40 min-h-[600px]">
-                
-                <div id="notice-bar" class="hidden bg-red-600 text-white py-2 mb-6 rounded-xl shadow-lg">
-                    <div id="marquee-container"></div>
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            <div class="lg:col-span-1">
+                <div class="glass p-6 rounded-3xl shadow-xl border border-white/40 sticky top-24">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">🏆 লিডারবোর্ড</h2>
+                    <div id="leaderboard-list" class="space-y-3 max-h-[500px] overflow-y-auto custom-scroll pr-2">
+                        <p class="text-gray-400 text-sm italic text-center">লোড হচ্ছে...</p>
+                    </div>
                 </div>
+            </div>
 
-                <div id="setup" class="text-center py-20">
-                    <h1 class="text-4xl font-extrabold mb-2 text-gray-800">🎓 অনলাইন পরীক্ষা পোর্টালে স্বাগতম</h1>
-                    <h2 id="exam-subject-setup" class="text-xl font-semibold text-indigo-600 mb-8 underline decoration-double">লোড হচ্ছে...</h2>
+            <div class="lg:col-span-3">
+                <div class="glass p-6 md:p-10 rounded-3xl shadow-2xl border border-white/40 min-h-[600px]">
                     
-                    <input type="text" id="userName" placeholder="আপনার পুরো নাম লিখুন" 
-                        class="p-4 border-2 border-indigo-100 rounded-2xl w-full max-w-md mb-6 block mx-auto text-center text-lg outline-none focus:border-indigo-500 transition shadow-sm">
-                    
-                    <button onclick="startExam()" class="bg-indigo-600 text-white px-14 py-4 rounded-2xl font-bold text-xl shadow-xl hover:scale-105 transition-transform active:scale-95">
-                        🚀 পরীক্ষা শুরু করুন
-                    </button>
-                </div>
+                    <div id="notice-bar" class="hidden bg-red-600 text-white py-2 mb-6 rounded-xl shadow-lg">
+                        <div id="marquee-container"></div>
+                    </div>
 
-                <div id="exam-area" class="hidden">
-                    <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-indigo-100 pb-6 gap-4">
-                        <div>
-                            <h2 id="display-name" class="font-bold text-2xl text-gray-800"></h2>
-                            <p id="exam-subject-running" class="text-indigo-600 font-medium"></p>
+                    <div id="setup" class="text-center py-20">
+                        <h1 class="text-4xl font-extrabold mb-2 text-gray-800">🎓 অনলাইন পরীক্ষা পোর্টালে স্বাগতম</h1>
+                        <h2 id="exam-subject-setup" class="text-xl font-semibold text-indigo-600 mb-8 underline decoration-double">লোড হচ্ছে...</h2>
+                        
+                        <input type="text" id="userName" placeholder="আপনার পুরো নাম লিখুন" 
+                            class="p-4 border-2 border-indigo-100 rounded-2xl w-full max-w-md mb-6 block mx-auto text-center text-lg outline-none focus:border-indigo-500 transition shadow-sm">
+                        
+                        <button onclick="startExam()" class="bg-indigo-600 text-white px-14 py-4 rounded-2xl font-bold text-xl shadow-xl hover:scale-105 transition-transform active:scale-95">
+                            🚀 পরীক্ষা শুরু করুন
+                        </button>
+                    </div>
+
+                    <div id="exam-area" class="hidden">
+                        <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-indigo-100 pb-6 gap-4">
+                            <div>
+                                <h2 id="display-name" class="font-bold text-2xl text-gray-800"></h2>
+                                <p id="exam-subject-running" class="text-indigo-600 font-medium"></p>
+                            </div>
+                            <div id="timer" class="bg-red-500 text-white font-mono text-3xl font-bold px-8 py-3 rounded-2xl shadow-lg animate-pulse">10:00</div>
                         </div>
-                        <div id="timer" class="bg-red-500 text-white font-mono text-3xl font-bold px-8 py-3 rounded-2xl shadow-lg animate-pulse">10:00</div>
+                        
+                        <div id="questions-container" class="space-y-8"></div>
+                        
+                        <button onclick="validateAndSubmit()" class="mt-12 w-full bg-green-600 text-white py-5 rounded-2xl font-bold text-2xl shadow-xl hover:bg-green-700 transition active:scale-95">
+                            ✅ উত্তর জমা দিন
+                        </button>
                     </div>
-                    
-                    <div id="questions-container" class="space-y-8"></div>
-                    
-                    <button onclick="validateAndSubmit()" class="mt-12 w-full bg-green-600 text-white py-5 rounded-2xl font-bold text-2xl shadow-xl hover:bg-green-700 transition active:scale-95">
-                        ✅ উত্তর জমা দিন
-                    </button>
-                </div>
 
-                <div id="result-area" class="hidden text-center py-10">
-                    <h2 class="text-4xl font-black text-indigo-800 mb-6">পরীক্ষা সম্পন্ন!</h2>
-                    <div class="bg-white/80 inline-block p-10 rounded-full border-4 border-indigo-200 mb-8 shadow-inner">
-                        <p id="final-score" class="text-6xl font-black text-green-600"></p>
+                    <div id="result-area" class="hidden text-center py-10">
+                        <h2 class="text-4xl font-black text-indigo-800 mb-6">পরীক্ষা সম্পন্ন!</h2>
+                        <div class="bg-white/80 inline-block p-10 rounded-full border-4 border-indigo-200 mb-8 shadow-inner">
+                            <p id="final-score" class="text-6xl font-black text-green-600"></p>
+                        </div>
+                        <p id="submission-time" class="text-gray-500 text-lg mb-8"></p>
+                        <div id="review-container" class="mt-10 text-left max-w-3xl mx-auto space-y-4"></div>
+                        <button onclick="location.reload()" class="mt-12 bg-gray-800 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:bg-black transition">
+                            🔄 হোম পেজে ফিরে যান
+                        </button>
                     </div>
-                    <p id="submission-time" class="text-gray-500 text-lg mb-8"></p>
-                    
-                    <div id="review-container" class="mt-10 text-left max-w-3xl mx-auto space-y-4"></div>
-                    
-                    <button onclick="location.reload()" class="mt-12 bg-gray-800 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:bg-black transition">
-                        🔄 হোম পেজে ফিরে যান
-                    </button>
                 </div>
-
             </div>
         </div>
-    </div>
+    </main>
 
+    <footer class="glass mt-12 px-6 py-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <p class="text-gray-700 font-bold text-lg">রাসেল ইসলাম একাডেমি</p>
+                <p class="text-gray-500 text-sm">মানসম্মত শিক্ষা ও আধুনিক প্রযুক্তি</p>
+            </div>
+            <div class="flex gap-4">
+                <span class="w-10 h-10 bg-indigo-100 flex items-center justify-center rounded-full text-indigo-600 hover:bg-indigo-600 hover:text-white transition cursor-pointer">f</span>
+                <span class="w-10 h-10 bg-indigo-100 flex items-center justify-center rounded-full text-indigo-600 hover:bg-indigo-600 hover:text-white transition cursor-pointer">in</span>
+                <span class="w-10 h-10 bg-indigo-100 flex items-center justify-center rounded-full text-indigo-600 hover:bg-indigo-600 hover:text-white transition cursor-pointer">🌐</span>
+            </div>
+            <div class="text-gray-500 text-sm text-center md:text-right">
+                © ২০২৬ রাসেল ইসলাম | সর্বস্বত্ব সংরক্ষিত
+            </div>
+        </div>
+    </footer>
     <script>
+        // --- আপনার পূর্বের সব জাভাস্ক্রিপ্ট এখানে থাকবে ---
         let questionsData = [];
-        let timeLeft = 600; // ১০ মিনিট
+        let timeLeft = 600;
         let timerInterval;
         let isExamStarted = false;
         let warnings = 0;
 
-        // --- শুরুতে সেটিংস ও লিডারবোর্ড লোড করা ---
         async function init() {
             loadLeaderboard();
             try {
                 const res = await fetch('/api/settings');
                 const settings = await res.json();
-                
                 document.getElementById('exam-subject-setup').innerText = "বিষয়: " + (settings.subject || "সাধারণ পরীক্ষা");
                 document.getElementById('exam-subject-running').innerText = "বিষয়: " + (settings.subject || "সাধারণ পরীক্ষা");
-
-                // নোটিশ বার হ্যান্ডলিং
                 const noticeBar = document.getElementById('notice-bar');
                 if (settings.notice && settings.notice.trim() !== "") {
                     noticeBar.classList.remove('hidden');
@@ -119,18 +150,15 @@
             } catch (e) { console.error("Settings load error", e); }
         }
 
-        // --- লিডারবোর্ড লোড করার ফাংশন ---
         async function loadLeaderboard() {
             try {
                 const res = await fetch('/api/leaderboard');
                 const data = await res.json();
                 const list = document.getElementById('leaderboard-list');
-                
                 if (data.length === 0) {
                     list.innerHTML = `<p class="text-gray-400 text-sm italic text-center">এখনও কেউ পরীক্ষা দেয়নি</p>`;
                     return;
                 }
-
                 list.innerHTML = data.map((user, i) => `
                     <div class="flex items-center justify-between p-4 bg-white rounded-2xl shadow-sm border border-indigo-50">
                         <div class="flex items-center gap-3">
@@ -144,23 +172,17 @@
             } catch (e) { console.error("Leaderboard error", e); }
         }
 
-        // --- পরীক্ষা শুরু ---
         async function startExam() {
             const name = document.getElementById('userName').value.trim();
             if (!name) return showPopup("অনুগ্রহ করে আপনার নাম লিখুন।");
-
             try {
-                const res = await fetch('/api/admin/questions'); // Server-এর সাথে মিল রাখা হয়েছে
+                const res = await fetch('/api/admin/questions');
                 questionsData = await res.json();
-                
-                if (questionsData.length === 0) return showPopup("কোনো প্রশ্ন পাওয়া যায়নি। অ্যাডমিনের সাথে যোগাযোগ করুন।");
-
+                if (questionsData.length === 0) return showPopup("কোনো প্রশ্ন পাওয়া যায়নি।");
                 isExamStarted = true;
                 document.getElementById('setup').classList.add('hidden');
                 document.getElementById('exam-area').classList.remove('hidden');
                 document.getElementById('display-name').innerText = "শিক্ষার্থী: " + name;
-
-                // প্রশ্ন রেন্ডার
                 document.getElementById('questions-container').innerHTML = questionsData.map((q, i) => `
                     <div class="p-8 bg-white/90 rounded-3xl shadow-sm border border-indigo-50" id="q-box-${i}">
                         <p class="font-bold text-xl mb-6 text-gray-800">${i + 1}. ${q.question}</p>
@@ -172,55 +194,41 @@
                                 </label>`).join('')}
                         </div>
                     </div>`).join('');
-
-                // টাইমার শুরু
                 timerInterval = setInterval(() => {
                     timeLeft--;
                     let m = Math.floor(timeLeft / 60), s = timeLeft % 60;
                     document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
                     if (timeLeft <= 0) submitExam();
                 }, 1000);
-            } catch (e) { showPopup("সার্ভারে সমস্যা হচ্ছে। আবার চেষ্টা করুন।"); }
+            } catch (e) { showPopup("সার্ভারে সমস্যা হচ্ছে।"); }
         }
 
-        // --- পরীক্ষা জমা দেওয়া ---
         async function submitExam(wasCheated = false) {
             clearInterval(timerInterval);
             if (!isExamStarted) return;
             isExamStarted = false;
-
             const name = document.getElementById('userName').value;
             const answers = {};
             questionsData.forEach((_, i) => {
                 const selected = document.querySelector(`input[name="q${i}"]:checked`);
                 answers[i] = selected ? selected.value : "উত্তর নেই";
             });
-
             try {
                 const res = await fetch('/api/submit-exam', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        name: name,
-                        answers: answers,
-                        duration: Math.floor((600 - timeLeft) / 60),
-                        cheated: wasCheated
-                    })
+                    body: JSON.stringify({ name, answers, duration: Math.floor((600-timeLeft)/60), cheated: wasCheated })
                 });
-
                 const result = await res.json();
                 document.getElementById('exam-area').classList.add('hidden');
                 document.getElementById('result-area').classList.remove('hidden');
-                
                 document.getElementById('final-score').innerText = wasCheated ? "বাতিল 🚩" : `স্কোর: ${result.score}`;
                 document.getElementById('submission-time').innerText = `জমা দেওয়ার সময়: ${new Date().toLocaleTimeString('bn-BD')}`;
-                
                 if (!wasCheated) renderReview(answers);
                 loadLeaderboard();
             } catch (e) { showPopup("সাবমিট করতে সমস্যা হয়েছে!"); }
         }
 
-        // --- উত্তর রিভিউ রেন্ডার ---
         function renderReview(studentAnswers) {
             document.getElementById('review-container').innerHTML = questionsData.map((q, i) => {
                 const sAns = studentAnswers[i];
@@ -234,7 +242,6 @@
             }).join('');
         }
 
-        // --- সাবমিট করার আগে ভ্যালিডেশন ---
         function validateAndSubmit() {
             let answeredCount = 0;
             questionsData.forEach((_, i) => {
@@ -245,15 +252,13 @@
                     document.getElementById(`q-box-${i}`).classList.add('border-red-500');
                 }
             });
-
             if (answeredCount < questionsData.length) {
-                showPopup("আপনি সব প্রশ্নের উত্তর দেননি! লাল চিহ্নিত বক্সগুলো চেক করুন।");
+                showPopup("আপনি সব প্রশ্নের উত্তর দেননি!");
             } else {
                 submitExam();
             }
         }
 
-        // --- Anti-cheat Logic ---
         document.addEventListener('visibilitychange', () => {
             if (document.hidden && isExamStarted) {
                 warnings++;
@@ -264,14 +269,12 @@
             }
         });
 
-        // --- হেল্পার ফাংশনসমূহ ---
         function showPopup(msg) { 
             document.getElementById('popup-msg').innerText = msg; 
             document.getElementById('custom-popup').classList.remove('hidden'); 
         }
         function closePopup() { document.getElementById('custom-popup').classList.add('hidden'); }
 
-        // কীবোর্ড শর্টকাট ব্লক করা
         document.onkeydown = (e) => {
             if (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'u' || e.key === 'i')) return false;
         };
