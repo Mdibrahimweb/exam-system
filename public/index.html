@@ -267,4 +267,16 @@
         // --- হেল্পার ফাংশনসমূহ ---
         function showPopup(msg) { 
             document.getElementById('popup-msg').innerText = msg; 
-            document.getElementById('
+            document.getElementById('custom-popup').classList.remove('hidden'); 
+        }
+        function closePopup() { document.getElementById('custom-popup').classList.add('hidden'); }
+
+        // কীবোর্ড শর্টকাট ব্লক করা
+        document.onkeydown = (e) => {
+            if (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'u' || e.key === 'i')) return false;
+        };
+
+        init();
+    </script>
+</body>
+</html>
