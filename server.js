@@ -85,14 +85,34 @@ app.post('/api/submit-exam', async (req, res) => {
             });
         }
 
+        // --- সময় সংশোধনের মূল অংশ ---
+        const now = new Date();
+        const optionsTime = { 
+            timeZone: 'Asia/Dhaka', 
+            hour12: true, 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit' 
+        };
+        const optionsDate = { 
+            timeZone: 'Asia/Dhaka', 
+            day: '2-digit', 
+            month: '2-digit', 
+            year: 'numeric' 
+        };
+
+        const bdTime = now.toLocaleTimeString('en-US', optionsTime); // ১২ ঘণ্টার ফরম্যাট (AM/PM)
+        const bdDate = now.toLocaleDateString('en-GB', optionsDate); // সঠিক তারিখ ফরম্যাট
+        // ---------------------------
+
         const newResult = await Result.create({
             name,
             subject: settings ? settings.subject : "সাধারণ পরীক্ষা",
             score: cheated ? 0 : score,
             cheated,
             duration,
-            date: new Date().toLocaleDateString('bn-BD'),
-            time: new Date().toLocaleTimeString('bn-BD')
+            date: bdDate,  // বাংলাদেশের তারিখ
+            time: bdTime   // বাংলাদেশের সঠিক সময়
         });
 
         res.json({ success: true, score: newResult.score, cheated });
