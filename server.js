@@ -51,7 +51,7 @@ app.get('/api/settings', async (req, res) => {
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// ২. সব প্রশ্ন লোড
+// ২. সব প্রশ্ন লোড (অ্যাডমিন ও ইউজার উভয়ের জন্য)
 app.get('/api/admin/questions', async (req, res) => {
     try {
         const qs = await Question.find().sort({ id: 1 });
@@ -59,7 +59,15 @@ app.get('/api/admin/questions', async (req, res) => {
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// ৩. পরীক্ষা সাবমিট
+// ৩. অ্যাডমিন রিপোর্টস/রেজাল্ট লগ পাওয়া
+app.get('/api/admin/reports', async (req, res) => {
+    try {
+        const reports = await Result.find().sort({ _id: -1 });
+        res.json(reports);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ৪. পরীক্ষা সাবমিট
 app.post('/api/submit-exam', async (req, res) => {
     try {
         const questions = await Question.find().sort({ id: 1 });
@@ -89,10 +97,9 @@ app.post('/api/submit-exam', async (req, res) => {
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// ৪. লিডারবোর্ড (সবচেয়ে গুরুত্বপূর্ণ অংশ)
+// ৫. লিডারবোর্ড
 app.get('/api/leaderboard', async (req, res) => {
     try {
-        // যারা চিটিং করেনি তাদের স্কোর অনুযায়ী সর্ট করা হয়েছে
         const leaderboard = await Result.find({ cheated: false })
             .sort({ score: -1, _id: 1 }) 
             .limit(10)
@@ -101,21 +108,49 @@ app.get('/api/leaderboard', async (req, res) => {
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// ৫. অ্যাডমিন প্রশ্ন সেভ
+// ৬. প্রশ্ন সেভ বা আপডেট
 app.post('/api/admin/save', async (req, res) => {
-    const { id, question, options, answer } = req.body;
-    if (id) {
-        await Question.findOneAndUpdate({ id }, { question, options, answer });
-    } else {
-        await Question.create({ id: Date.now(), question, options, answer });
-    }
-    res.json({ success: true });
+    try {
+        const { id, question, options, answer } = req.body;
+        if (id) {
+            await Question.findOneAndUpdate({ id: Number(id) }, { question, options, answer });
+        } else {
+            await Question.create({ id: Date.now(), question, options, answer });
+        }
+        res.json({ success: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// ৬. অ্যাডমিন সেটিংস আপডেট
+// ৭. নির্দিষ্ট একটি প্রশ্ন ডিলিট
+app.delete('/api/admin/delete/:id', async (req, res) => {
+    try {
+        await Question.deleteOne({ id: Number(req.params.id) });
+        res.json({ success: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ৮. সব প্রশ্ন ডিলিট
+app.delete('/api/admin/delete-all-questions', async (req, res) => {
+    try {
+        await Question.deleteMany({});
+        res.json({ success: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ৯. রেজাল্ট লগ বা রিপোর্টস রিসেট
+app.delete('/api/admin/reset-reports', async (req, res) => {
+    try {
+        await Result.deleteMany({});
+        res.json({ success: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ১০. সেটিংস আপডেট
 app.post('/api/admin/save-settings', async (req, res) => {
-    await Setting.findOneAndUpdate({}, { subject: req.body.subject, notice: req.body.notice }, { upsert: true });
-    res.json({ success: true });
+    try {
+        await Setting.findOneAndUpdate({}, { subject: req.body.subject, notice: req.body.notice }, { upsert: true });
+        res.json({ success: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 const PORT = process.env.PORT || 3000;
