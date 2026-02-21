@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <title>Secure Online Exam</title>
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            user-select: none;
+        }
+
+        .glass {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.65);
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #6366f1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-indigo-200 via-blue-100 to-purple-200 min-h-screen p-4 md:p-8"
+    oncontextmenu="return false" oncopy="return false" onpaste="return false">
+
+    <div id="custom-popup"
+        class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl border-t-8 border-red-500">
+            <div id="popup-icon" class="text-6xl mb-4">⚠️</div>
+            <h3 id="popup-title" class="text-2xl font-bold mb-2">সতর্কতা!</h3>
+            <p id="popup-msg" class="text-gray-600 mb-6"></p>
+            <button onclick="closePopup()" id="popup-btn"
+                class="bg-indigo-600 text-white px-8 py-2 rounded-xl font-bold">ঠিক আছে</button>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div class="lg:col-span-1">
+            <div class="glass p-6 rounded-3xl shadow-xl border border-white/40 sticky top-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">🏆 লিডারবোর্ড</h2>
+                <div id="leaderboard-list" class="space-y-3 max-h-[500px] overflow-y-auto custom-scroll pr-2"></div>
+            </div>
+        </div>
+
+        <div class="lg:col-span-3">
+            <div class="glass p-6 md:p-10 rounded-3xl shadow-2xl border border-white/40 min-h-[600px]">
+                <div id="notice-bar" class="hidden bg-red-600 text-white py-2 mb-4 rounded-xl shadow-lg">
+    <div id="marquee-container">
+        </div>
+</div>
+
+<script>
+    async function fetchNotice() {
+        try {
+            const res = await fetch('/api/settings');
+            const settings = await res.json();
+            
+            const noticeBar = document.getElementById('notice-bar');
+            const container = document.getElementById('marquee-container');
+
+            if (settings.notice && settings.notice.trim() !== "") {
+                noticeBar.classList.remove('hidden');
+                
+                // মারকিউ ট্যাগটি নতুন করে ইনজেক্ট করা হচ্ছে যাতে ব্রাউজার রি-রেন্ডার করে
+                container.innerHTML = `
+                    <marquee behavior="scroll" direction="left" scrollamount="3" class="font-bold text-sm italic">
+                        📢 বিশেষ ঘোষণা: ${settings.notice} &nbsp;&nbsp;&nbsp;&nbsp; 📢 ${settings.notice}
+                    </marquee>
+                `;
+            } else {
+                noticeBar.classList.add('hidden');
+            }
+        } catch (e) {
+            console.error("Notice fetch error:", e);
+        }
+    }
+    
+    // পেজ লোড হলে কল হবে
+    fetchNotice();
+</script>
+                <div id="setup" class="text-center py-20">
+                    <h1 class="text-4xl font-extrabold mb-2 text-gray-800">🎓 অনলাইন পরীক্ষা</h1>
+                    <h2 id="exam-subject-setup"
+                        class="text-xl font-semibold text-indigo-600 mb-8 underline decoration-double">লোড হচ্ছে...</h2>
+
+                    <input type="text" id="userName" placeholder="আপনার নাম লিখুন"
+                        class="p-4 border border-gray-300 rounded-2xl w-72 md:w-96 mb-6 block mx-auto outline-none focus:ring-4 focus:ring-indigo-300 transition text-center text-lg">
+                    <button onclick="startExam()"
+                        class="bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-12 py-4 rounded-2xl font-bold text-lg shadow-lg hover:scale-105 transition">🚀
+                        শুরু করুন</button>
+                </div>
+
+                <div id="exam-area" class="hidden">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8 border-b pb-4">
+                        <div>
+                            <h2 id="display-name" class="font-bold text-lg text-gray-700"></h2>
+                            <p id="exam-subject-running" class="text-sm font-bold text-indigo-600"></p>
+                            <p id="warning-count" class="text-xs text-red-500 font-bold mt-1"></p>
+                        </div>
+                        <div id="timer"
+                            class="bg-red-500 text-white font-mono text-2xl font-bold px-6 py-3 rounded-xl shadow-lg animate-pulse">
+                            10:00</div>
+                    </div>
+                    <div id="questions-container" class="space-y-6"></div>
+                    <button onclick="validateAndSubmit()"
+                        class="mt-10 w-full bg-green-600 text-white py-4 rounded-2xl font-bold text-xl shadow-lg hover:bg-green-700 transition">✅
+                        সাবমিট করুন</button>
+                </div>
+
+                <div id="result-area" class="hidden text-center py-6">
+                    <h2 class="text-3xl font-extrabold text-indigo-700 mb-4">ফলাফল</h2>
+                    <div class="bg-white/50 inline-block p-6 rounded-3xl border border-white mb-6">
+                        <p id="final-score" class="text-5xl font-black text-green-600 mb-2"></p>
+                        <p id="submission-time" class="text-gray-600 font-medium"></p>
+                    </div>
+                    <div id="review-container" class="mt-8 text-left max-w-2xl mx-auto space-y-4"></div>
+                    <button onclick="location.reload()" class="mt-10 bg-gray-800 text-white px-8 py-3 rounded-2xl">🔄
+                        আবার শুরু করুন</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let questionsData = [];
+        let timeLeft = 600;
+        let timerInterval;
+        let isExamStarted = false;
+        let warnings = 0;
+
+        async function init() {
+            loadLeaderboard();
+            const res = await fetch('/api/settings');
+            const settings = await res.json();
+            document.getElementById('exam-subject-setup').innerText = "বিষয়: " + settings.subject;
+            document.getElementById('exam-subject-running').innerText = "বিষয়: " + settings.subject;
+        }
+
+        // --- Anti-Cheat Logic ---
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && isExamStarted) {
+                warnings++;
+                if (warnings >= 1) {
+                    showPopup("আপনি বারবার ট্যাব পরিবর্তন করেছেন! পরীক্ষা বাতিল করা হলো।");
+                    submitExam(true);
+                } else {
+                    showPopup(`সতর্কবার্তা ${warnings}/1: ট্যাব পরিবর্তন করবেন না! তাহলে পরীক্ষা অটো-সাবমিট হয়ে যাবে।`);
+                }
+            }
+        });
+
+        // Block Shortcuts
+        document.onkeydown = function (e) {
+            if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 86 || e.keyCode === 85 || e.keyCode === 73)) {
+                return false;
+            }
+        };
+
+        async function startExam() {
+            const name = document.getElementById('userName').value;
+            if (!name) return showPopup("আপনার নাম লিখুন।");
+
+            try {
+                const res = await fetch('/api/get-questions');
+                questionsData = await res.json();
+                if (questionsData.length === 0) return showPopup("কোনো প্রশ্ন পাওয়া যায়নি!");
+
+                isExamStarted = true;
+                document.getElementById('setup').classList.add('hidden');
+                document.getElementById('exam-area').classList.remove('hidden');
+                document.getElementById('display-name').innerText = "শিক্ষার্থী: " + name;
+
+                document.getElementById('questions-container').innerHTML = questionsData.map((q, i) => `
+                    <div class="p-6 bg-white/90 rounded-2xl shadow-md border" id="q-box-${i}">
+                        <p class="font-bold text-lg mb-4 text-gray-800">${i + 1}. ${q.question}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            ${q.options.map(opt => `
+                                <label class="flex items-center gap-3 p-3 hover:bg-indigo-50 rounded-xl cursor-pointer">
+                                    <input type="radio" name="q${i}" value="${opt}" class="w-5 h-5 accent-indigo-600">
+                                    <span class="text-gray-700 font-medium">${opt}</span>
+                                </label>`).join('')}
+                        </div>
+                    </div>`).join('');
+
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    let m = Math.floor(timeLeft / 60), s = timeLeft % 60;
+                    document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+                    if (timeLeft <= 0) submitExam();
+                }, 1000);
+            } catch (e) { showPopup("সার্ভার কানেকশন এরর!"); }
+        }
+
+        async function submitExam(wasCheated = false) {
+            clearInterval(timerInterval);
+            if (!isExamStarted) return;
+            isExamStarted = false;
+
+            const answers = {};
+            questionsData.forEach((_, i) => {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                answers[i] = selected ? selected.value : "উত্তর দেয় নি";
+            });
+
+            const res = await fetch('/api/submit-exam', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: document.getElementById('userName').value,
+                    answers,
+                    duration: Math.floor((600 - timeLeft) / 60),
+                    cheated: wasCheated
+                })
+            });
+
+            const result = await res.json();
+            document.getElementById('exam-area').classList.add('hidden');
+            document.getElementById('result-area').classList.remove('hidden');
+            document.getElementById('final-score').innerText = wasCheated ? "বাতিল (চিটিং)" : `স্কোর: ${result.score}`;
+            document.getElementById('submission-time').innerText = `সময়: ${new Date().toLocaleTimeString('bn-BD')}`;
+            renderReview(answers);
+            loadLeaderboard();
+        }
+
+        function validateAndSubmit() {
+            let allAnswered = true;
+            questionsData.forEach((_, i) => {
+                if (!document.querySelector(`input[name="q${i}"]:checked`)) {
+                    allAnswered = false;
+                    document.getElementById(`q-box-${i}`).classList.add('border-red-500');
+                } else {
+                    document.getElementById(`q-box-${i}`).classList.remove('border-red-500');
+                }
+            });
+            if (!allAnswered) showPopup("সব প্রশ্নের উত্তর দিন!");
+            else submitExam();
+        }
+
+        async function loadLeaderboard() {
+            try {
+                const res = await fetch('/api/leaderboard');
+                const data = await res.json();
+                document.getElementById('leaderboard-list').innerHTML = data.map((user, i) => `
+                    <div class="flex items-center justify-between p-3 bg-white/80 rounded-xl shadow-sm border border-indigo-50">
+                        <div class="flex items-center gap-3">
+                            <span class="font-bold text-indigo-600">#${i + 1}</span>
+                            <span class="font-semibold text-gray-700">${user.name}</span>
+                        </div>
+                        <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-lg font-bold">${user.score}</span>
+                    </div>`).join('');
+            } catch (e) { }
+        }
+
+        function renderReview(studentAnswers) {
+            document.getElementById('review-container').innerHTML = questionsData.map((q, i) => {
+                const sAns = studentAnswers[i];
+                const isCorrect = String(sAns).trim() === String(q.answer).trim();
+                return `
+                    <div class="p-4 rounded-xl border ${isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}">
+                        <p class="font-bold text-gray-800">${i + 1}. ${q.question}</p>
+                        <p class="text-sm">আপনার উত্তর: ${sAns} ${isCorrect ? '✅' : '❌'}</p>
+                        ${!isCorrect ? `<p class="text-sm text-green-700 font-bold">সঠিক উত্তর: ${q.answer}</p>` : ''}
+                    </div>`;
+            }).join('');
+        }
+
+        function showPopup(msg) {
+            document.getElementById('popup-msg').innerText = msg;
+            document.getElementById('custom-popup').classList.remove('hidden');
+        }
+        function closePopup() { document.getElementById('custom-popup').classList.add('hidden'); }
+
+        init();
+    </script>
+</body>
+
+</html>

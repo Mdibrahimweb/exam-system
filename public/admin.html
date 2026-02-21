@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <title>Admin Dashboard</title>
+
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        .glass {
+            backdrop-filter: blur(18px);
+            background: rgba(30, 41, 59, 0.75);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white min-h-screen p-4">
+
+    <div class="max-w-7xl mx-auto space-y-8">
+
+        <div class="glass p-6 rounded-2xl shadow-2xl border border-slate-700 flex flex-col lg:flex-row justify-between items-center gap-4">
+            <h1 class="text-3xl font-extrabold tracking-wide bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                অ্যাডমিন কন্ট্রোল
+            </h1>
+
+            <div class="flex flex-wrap gap-3 items-center justify-center">
+                <h2 class="text-lg font-bold text-blue-400">সাবজেক্ট নামঃ</h2>
+                <input type="text" id="subject-input" placeholder="সাবজেক্ট নাম"
+                    class="bg-slate-800 p-2 rounded-lg text-sm border border-slate-600 outline-none focus:ring-2 focus:ring-blue-500 transition">
+
+                <input type="text" id="notice-input" placeholder="চলমান নোটিশ লিখুন"
+                    class="bg-slate-800 p-2 rounded-lg text-sm border border-slate-600 outline-none focus:ring-2 focus:ring-blue-500 transition">
+
+                <button onclick="saveAllSettings()"
+                    class="bg-gradient-to-r from-emerald-500 to-green-600 px-4 py-2 rounded-lg text-sm font-bold hover:scale-105 transition shadow-md">
+                    সেট করুন
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+
+            <div class="glass p-6 rounded-2xl shadow-xl border border-slate-700">
+                <h2 class="text-2xl font-bold mb-6 text-blue-400">📝 প্রশ্ন ম্যানেজমেন্ট</h2>
+
+                <div class="mb-6 p-6 border-2 border-dashed border-slate-600 rounded-2xl bg-slate-800/40 text-center hover:bg-slate-800/60 transition">
+                    <input type="file" id="csvFile" accept=".csv" class="hidden" onchange="handleCSVUpload(event)">
+                    <label for="csvFile"
+                        class="bg-gradient-to-r from-emerald-500 to-green-600 px-6 py-2 rounded-lg text-xs cursor-pointer hover:scale-105 transition inline-block shadow-md">
+                        📁 CSV ফাইল আপলোড করুন
+                    </label>
+                    <p class="text-xs text-slate-400 mt-3 font-light">ফরম্যাট: প্রশ্ন, অপশন১, অপশন২, অপশন৩, অপশন৪, উত্তর</p>
+                </div>
+
+                <div class="space-y-4 bg-slate-800/60 p-5 rounded-2xl shadow-inner border border-slate-700">
+                    <input type="hidden" id="q-id">
+                    <input type="text" id="q-text" placeholder="প্রশ্ন লিখুন"
+                        class="w-full p-3 rounded-xl bg-slate-900 border border-slate-600 outline-none focus:ring-2 focus:ring-blue-500 transition">
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input type="text" id="opt1" placeholder="অপশন ১" class="p-2 rounded-lg bg-slate-900 border border-slate-600 text-sm">
+                        <input type="text" id="opt2" placeholder="অপশন ২" class="p-2 rounded-lg bg-slate-900 border border-slate-600 text-sm">
+                        <input type="text" id="opt3" placeholder="অপশন ৩" class="p-2 rounded-lg bg-slate-900 border border-slate-600 text-sm">
+                        <input type="text" id="opt4" placeholder="অপশন ৪" class="p-2 rounded-lg bg-slate-900 border border-slate-600 text-sm">
+                    </div>
+
+                    <input type="text" id="q-ans" placeholder="সঠিক উত্তর"
+                        class="w-full p-3 rounded-xl bg-slate-900 border-l-4 border-green-500 outline-none">
+
+                    <button onclick="saveQ()"
+                        class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 p-3 rounded-xl font-bold hover:scale-[1.02] transition shadow-lg">
+                        💾 সেভ করুন
+                    </button>
+                    <button onclick="clearQForm()"
+                        class="w-full bg-slate-600 p-2 rounded-lg text-xs hover:bg-slate-500 transition">
+                        নতুন প্রশ্ন (ক্লিন ফর্ম)
+                    </button>
+                </div>
+
+                <div id="q-list" class="mt-6 space-y-3 max-h-[400px] overflow-y-auto pr-2"></div>
+                <div class="flex justify-between items-center mt-6">
+                    <button onclick="deleteAllQuestions()"
+                        class="bg-gradient-to-r from-orange-500 to-red-600 px-4 py-2 rounded-lg text-xs font-bold hover:scale-105 transition shadow-md">
+                        সব মুছুন 🗑️
+                    </button>
+                </div>
+            </div>
+
+            <div class="glass p-6 rounded-2xl shadow-xl border border-slate-700">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-red-400">📊 রেজাল্ট লগ</h2>
+                    <button onclick="resetReports()"
+                        class="bg-gradient-to-r from-red-500 to-pink-600 px-4 py-2 rounded-lg text-xs font-bold hover:scale-105 transition shadow-md">
+                        রিসেট সব
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-slate-700">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-800 text-slate-300">
+                            <tr>
+                                <th class="p-3">নাম</th>
+                                <th class="p-3 text-center">স্কোর</th>
+                                <th class="p-3 text-center">স্ট্যাটাস</th>
+                                <th class="p-3 text-right">সময়</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report-list" class="divide-y divide-slate-700"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="glass p-6 rounded-2xl border border-slate-700 flex items-center justify-between">
+                <div>
+                    <p class="text-slate-400 text-sm">মোট পরীক্ষার্থী</p>
+                    <h3 id="total-students" class="text-3xl font-bold text-blue-400">০</h3>
+                </div>
+                <div class="bg-blue-500/20 p-3 rounded-xl text-blue-400 text-2xl">👥</div>
+            </div>
+            <div class="glass p-6 rounded-2xl border border-slate-700 flex items-center justify-between">
+                <div>
+                    <p class="text-slate-400 text-sm">চিটিং ধরা পড়েছে</p>
+                    <h3 id="total-cheated" class="text-3xl font-bold text-red-400">০</h3>
+                </div>
+                <div class="bg-red-500/20 p-3 rounded-xl text-red-400 text-2xl">🚩</div>
+            </div>
+            <div class="glass p-6 rounded-2xl border border-slate-700 flex items-center justify-between">
+                <div>
+                    <p class="text-slate-400 text-sm">গড় স্কোর</p>
+                    <h3 id="avg-score" class="text-3xl font-bold text-emerald-400">০</h3>
+                </div>
+                <div class="bg-emerald-500/20 p-3 rounded-xl text-emerald-400 text-2xl">📊</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allQuestions = [];
+
+        // Custom Styled Toast
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            background: '#1e293b',
+            color: '#fff',
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        async function loadData() {
+            try {
+                const qRes = await fetch('/api/admin/questions');
+                allQuestions = await qRes.json();
+                const rRes = await fetch('/api/admin/reports');
+                const reports = await rRes.json();
+                const sRes = await fetch('/api/settings');
+                const settings = await sRes.json();
+
+                document.getElementById('subject-input').value = settings.subject || "";
+                document.getElementById('notice-input').value = settings.notice || "";
+
+                renderQuestions();
+                renderReports(reports);
+            } catch (e) {
+                console.error("ডেটা লোড করতে সমস্যা হয়েছে।");
+            }
+        }
+
+        async function saveAllSettings() {
+            const subject = document.getElementById('subject-input').value;
+            const notice = document.getElementById('notice-input').value;
+
+            if (!subject) return Toast.fire({ icon: 'error', title: 'সাবজেক্টের নাম দিন' });
+
+            await fetch('/api/admin/save-settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ subject, notice })
+            });
+
+            Swal.fire({
+                icon: 'success',
+                title: 'আপডেট সফল!',
+                text: 'সাবজেক্ট ও নোটিশ সেভ করা হয়েছে।',
+                background: '#1e293b',
+                color: '#fff',
+                confirmButtonColor: '#10b981'
+            });
+        }
+
+        function renderReports(reports) {
+            const total = reports.length;
+            const cheatedCount = reports.filter(r => r.cheated).length;
+            const avg = total > 0 ? (reports.reduce((acc, r) => acc + r.score, 0) / total).toFixed(1) : 0;
+
+            document.getElementById('total-students').innerText = total;
+            document.getElementById('total-cheated').innerText = cheatedCount;
+            document.getElementById('avg-score').innerText = avg;
+
+            document.getElementById('report-list').innerHTML = reports.map(r => `
+                <tr class="hover:bg-slate-700/50 ${r.cheated ? 'bg-red-900/10' : ''}">
+                    <td class="p-3 font-medium">${r.name}</td>
+                    <td class="p-3 text-center font-bold ${r.cheated ? 'text-red-400' : 'text-blue-400'}">${r.score}</td>
+                    <td class="p-3 text-center">
+                        ${r.cheated
+                            ? '<span class="px-3 py-1 bg-red-600/20 text-red-400 border border-red-500/30 text-[10px] rounded-full font-bold uppercase tracking-tighter">Cheated 🚩</span>'
+                            : '<span class="px-3 py-1 bg-green-600/20 text-green-400 border border-green-500/30 text-[10px] rounded-full font-bold uppercase tracking-tighter">Clear ✅</span>'}
+                    </td>
+                    <td class="p-3 text-right"><span class="text-[11px] text-slate-400">${r.time}</span></td>
+                </tr>`).join('');
+        }
+
+        function renderQuestions() {
+            document.getElementById('q-list').innerHTML = allQuestions.map(q => `
+                <div class="bg-slate-700/30 p-3 rounded border border-slate-600 flex justify-between items-center transition hover:border-blue-500/50">
+                    <div class="truncate mr-4 text-xs">
+                        <p class="font-bold text-slate-200">${q.question}</p>
+                        <p class="text-green-400">সঠিক উত্তর: ${q.answer}</p>
+                    </div>
+                    <div class="flex gap-2 shrink-0">
+                        <button onclick="editQ(${q.id})" class="p-1.5 bg-blue-500/20 text-blue-400 rounded hover:bg-blue-500 hover:text-white transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                        </button>
+                        <button onclick="delQ(${q.id})" class="p-1.5 bg-red-500/20 text-red-400 rounded hover:bg-red-500 hover:text-white transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
+                    </div>
+                </div>`).join('');
+        }
+
+        async function saveQ() {
+            const qText = document.getElementById('q-text').value;
+            const qAns = document.getElementById('q-ans').value;
+            if (!qText || !qAns) return Toast.fire({ icon: 'warning', title: 'প্রশ্ন এবং উত্তর উভয়ই প্রয়োজন' });
+
+            const data = {
+                id: document.getElementById('q-id').value || null,
+                question: qText,
+                options: [
+                    document.getElementById('opt1').value,
+                    document.getElementById('opt2').value,
+                    document.getElementById('opt3').value,
+                    document.getElementById('opt4').value
+                ],
+                answer: qAns
+            };
+
+            await fetch('/api/admin/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            Toast.fire({ icon: 'success', title: 'প্রশ্ন সেভ করা হয়েছে' });
+            clearQForm();
+            loadData();
+        }
+
+        async function handleCSVUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            Swal.fire({
+                title: 'আপলোড হচ্ছে...',
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading(),
+                background: '#1e293b',
+                color: '#fff'
+            });
+
+            const reader = new FileReader();
+            reader.onload = async function (e) {
+                const text = e.target.result;
+                const rows = text.split('\n').slice(1);
+                for (let row of rows) {
+                    const cols = row.split(',');
+                    if (cols.length >= 6) {
+                        const qData = {
+                            id: null,
+                            question: cols[0].trim(),
+                            options: [cols[1].trim(), cols[2].trim(), cols[3].trim(), cols[4].trim()],
+                            answer: cols[5].trim()
+                        };
+                        await fetch('/api/admin/save', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(qData)
+                        });
+                    }
+                }
+                loadData();
+                Swal.fire({ icon: 'success', title: 'CSV ফাইল আপলোড সফল!', background: '#1e293b', color: '#fff' });
+            };
+            reader.readAsText(file);
+        }
+
+        async function delQ(id) {
+            Swal.fire({
+                title: 'নিশ্চিত তো?',
+                text: "প্রশ্নটি মুছে ফেলা হবে!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'হ্যাঁ, মুছুন',
+                cancelButtonText: 'বাতিল',
+                background: '#1e293b',
+                color: '#fff'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    await fetch(`/api/admin/delete/${id}`, { method: 'DELETE' });
+                    loadData();
+                    Toast.fire({ icon: 'success', title: 'মুছে ফেলা হয়েছে' });
+                }
+            });
+        }
+
+        async function deleteAllQuestions() {
+            Swal.fire({
+                title: 'সব প্রশ্ন মুছবেন?',
+                text: "এটি আর ফিরে পাওয়া সম্ভব নয়!",
+                icon: 'error',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                confirmButtonText: 'হ্যাঁ, সব মুছুন!',
+                background: '#1e293b',
+                color: '#fff'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    await fetch('/api/admin/delete-all-questions', { method: 'DELETE' });
+                    loadData();
+                    Swal.fire({ icon: 'success', title: 'সব প্রশ্ন ডিলিট হয়েছে', background: '#1e293b', color: '#fff' });
+                }
+            });
+        }
+
+        async function resetReports() {
+            Swal.fire({
+                title: 'রেজাল্ট রিসেট?',
+                text: "সব শিক্ষার্থীর রেকর্ড মুছে যাবে!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#f43f5e',
+                confirmButtonText: 'হ্যাঁ, রিসেট করুন',
+                background: '#1e293b',
+                color: '#fff'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    await fetch('/api/admin/reset-reports', { method: 'DELETE' });
+                    loadData();
+                    Toast.fire({ icon: 'info', title: 'রেজাল্ট লগ খালি করা হয়েছে' });
+                }
+            });
+        }
+
+        function editQ(id) {
+            const q = allQuestions.find(item => item.id == id);
+            if (q) {
+                document.getElementById('q-id').value = q.id;
+                document.getElementById('q-text').value = q.question;
+                document.getElementById('opt1').value = q.options[0];
+                document.getElementById('opt2').value = q.options[1];
+                document.getElementById('opt3').value = q.options[2];
+                document.getElementById('opt4').value = q.options[3];
+                document.getElementById('q-ans').value = q.answer;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                Toast.fire({ icon: 'info', title: 'এডিট মোড চালু' });
+            }
+        }
+
+        function clearQForm() {
+            document.getElementById('q-id').value = "";
+            document.getElementById('q-text').value = "";
+            document.getElementById('opt1').value = "";
+            document.getElementById('opt2').value = "";
+            document.getElementById('opt3').value = "";
+            document.getElementById('opt4').value = "";
+            document.getElementById('q-ans').value = "";
+        }
+
+        loadData();
+    </script>
+</body>
+
+</html>
