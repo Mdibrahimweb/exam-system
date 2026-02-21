@@ -6,50 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="icon" type="image/png"
-        href="https://cdn-icons-png.flaticon.com/512/4919/4919538.png">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/4919/4919538.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <title>Admin Dashboard | Rasel Islam</title>
 
     <style>
-        body {
-            font-family: 'Hind Siliguri', sans-serif;
-        }
-
-        .glass {
-            backdrop-filter: blur(18px);
-            background: rgba(30, 41, 59, 0.75);
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #1e293b;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 10px;
-        }
-
-        /* Login Overlay */
-        #login-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            background: rgba(2, 6, 23, 0.95);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(10px);
-        }
+        body { font-family: 'Hind Siliguri', sans-serif; }
+        .glass { backdrop-filter: blur(18px); background: rgba(30, 41, 59, 0.75); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        #login-overlay { position: fixed; inset: 0; z-index: 9999; background: rgba(2, 6, 23, 0.95); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
     </style>
 </head>
 
@@ -64,111 +34,83 @@
             <div class="space-y-4">
                 <div>
                     <label class="text-xs text-slate-400 ml-1">ইউজারনেম</label>
-                    <input type="text" id="admin-user" placeholder="Username"
-                        class="w-full bg-slate-800 p-3 rounded-xl border border-slate-600 outline-none focus:ring-2 focus:ring-blue-500 transition mt-1">
+                    <input type="text" id="admin-user" placeholder="Username" class="w-full bg-slate-800 p-3 rounded-xl border border-slate-600 outline-none focus:ring-2 focus:ring-blue-500 transition mt-1">
                 </div>
                 <div>
-                    <label class="text-xs text-slate-400 ml-1">পাসওয়ার্ড</label>
-                    <input type="password" id="admin-pass" placeholder="Password"
-                        class="w-full bg-slate-800 p-3 rounded-xl border border-slate-600 outline-none focus:ring-2 focus:ring-blue-500 transition mt-1">
+                    <label class="text-xs text-slate-400 ml-1">পাসওয়ার্ড</label>
+                    <input type="password" id="admin-pass" placeholder="Password" class="w-full bg-slate-800 p-3 rounded-xl border border-slate-600 outline-none focus:ring-2 focus:ring-blue-500 transition mt-1">
                 </div>
-                <button onclick="checkLogin()"
-                    class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 p-3 rounded-xl font-bold hover:scale-[1.02] transition shadow-lg mt-2">
-                    প্রবেশ করুন
-                </button>
+                <button onclick="checkLogin()" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 p-3 rounded-xl font-bold hover:scale-[1.02] transition shadow-lg mt-2">প্রবেশ করুন</button>
             </div>
         </div>
     </div>
+
     <div id="main-content" class="hidden">
         <div class="max-w-7xl mx-auto space-y-8">
 
-            <div
-                class="glass p-6 rounded-2xl shadow-2xl border border-slate-700 flex flex-col lg:flex-row justify-between items-center gap-4">
+            <div class="glass p-6 rounded-2xl shadow-2xl border border-slate-700 flex flex-col lg:flex-row justify-between items-center gap-4">
                 <div class="flex items-center gap-4">
-                    <h1
-                        class="text-3xl font-extrabold tracking-wide bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                        অ্যাডমিন কন্ট্রোল
-                    </h1>
-                    <button onclick="logout()"
-                        class="text-[10px] bg-red-500/20 text-red-400 px-2 py-1 rounded border border-red-500/30 hover:bg-red-500 hover:text-white transition">লগআউট</button>
+                    <h1 class="text-3xl font-extrabold tracking-wide bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">অ্যাডমিন কন্ট্রোল</h1>
+                    <button onclick="logout()" class="text-[10px] bg-red-500/20 text-red-400 px-2 py-1 rounded border border-red-500/30 hover:bg-red-500 hover:text-white transition">লগআউট</button>
                 </div>
 
                 <div class="flex flex-wrap gap-3 items-center justify-center">
-                    <h2 class="text-lg font-bold text-blue-400">সাবজেক্ট নামঃ</h2>
-                    <input type="text" id="subject-input" placeholder="সাবজেক্ট নাম"
-                        class="bg-slate-800 p-2 rounded-lg text-sm border border-slate-600 outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    <div class="flex flex-col">
+                        <label class="text-[10px] text-blue-400 ml-1">সাবজেক্ট</label>
+                        <input type="text" id="subject-input" placeholder="সাবজেক্ট নাম" class="bg-slate-800 p-2 rounded-lg text-sm border border-slate-600 outline-none focus:ring-2 focus:ring-blue-500 transition w-32">
+                    </div>
 
-                    <input type="text" id="notice-input" placeholder="চলমান নোটিশ লিখুন"
-                        class="bg-slate-800 p-2 rounded-lg text-sm border border-slate-600 outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    <div class="flex flex-col">
+                        <label class="text-[10px] text-yellow-400 ml-1">সময় (মিনিট)</label>
+                        <input type="number" id="duration-input" placeholder="মিনিট" class="bg-slate-800 p-2 rounded-lg text-sm border border-slate-600 outline-none focus:ring-2 focus:ring-yellow-500 transition w-20">
+                    </div>
 
-                    <button onclick="saveAllSettings()"
-                        class="bg-gradient-to-r from-emerald-500 to-green-600 px-4 py-2 rounded-lg text-sm font-bold hover:scale-105 transition shadow-md">
-                        সেট করুন
-                    </button>
+                    <div class="flex flex-col">
+                        <label class="text-[10px] text-slate-400 ml-1">নোটিশ</label>
+                        <input type="text" id="notice-input" placeholder="চলমান নোটিশ লিখুন" class="bg-slate-800 p-2 rounded-lg text-sm border border-slate-600 outline-none focus:ring-2 focus:ring-blue-500 transition w-48">
+                    </div>
+
+                    <button onclick="saveAllSettings()" class="bg-gradient-to-r from-emerald-500 to-green-600 px-6 py-2 rounded-lg text-sm font-bold hover:scale-105 transition shadow-md self-end">সেট করুন</button>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
-
                 <div class="glass p-6 rounded-2xl shadow-xl border border-slate-700">
                     <h2 class="text-2xl font-bold mb-6 text-blue-400">📝 প্রশ্ন ম্যানেজমেন্ট</h2>
 
-                    <div
-                        class="mb-6 p-6 border-2 border-dashed border-slate-600 rounded-2xl bg-slate-800/40 text-center hover:bg-slate-800/60 transition">
+                    <div class="mb-6 p-6 border-2 border-dashed border-slate-600 rounded-2xl bg-slate-800/40 text-center hover:bg-slate-800/60 transition">
                         <input type="file" id="csvFile" accept=".csv" class="hidden" onchange="handleCSVUpload(event)">
-                        <label for="csvFile"
-                            class="bg-gradient-to-r from-emerald-500 to-green-600 px-6 py-2 rounded-lg text-xs cursor-pointer hover:scale-105 transition inline-block shadow-md">
-                            📁 CSV ফাইল আপলোড করুন
-                        </label>
-                        <p class="text-xs text-slate-400 mt-3 font-light">ফরম্যাট: প্রশ্ন, অপশন১, অপশন২, অপশন৩, অপশন৪,
-                            উত্তর</p>
+                        <label for="csvFile" class="bg-gradient-to-r from-emerald-500 to-green-600 px-6 py-2 rounded-lg text-xs cursor-pointer hover:scale-105 transition inline-block shadow-md">📁 CSV ফাইল আপলোড করুন</label>
+                        <p class="text-xs text-slate-400 mt-3 font-light">ফরম্যাট: প্রশ্ন, অপশন১, অপশন২, অপশন৩, অপশন৪, উত্তর</p>
                     </div>
 
                     <div class="space-y-4 bg-slate-800/60 p-5 rounded-2xl shadow-inner border border-slate-700">
                         <input type="hidden" id="q-id">
-                        <input type="text" id="q-text" placeholder="প্রশ্ন লিখুন"
-                            class="w-full p-3 rounded-xl bg-slate-900 border border-slate-600 outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        <input type="text" id="q-text" placeholder="প্রশ্ন লিখুন" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-600 outline-none focus:ring-2 focus:ring-blue-500 transition">
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            <input type="text" id="opt1" placeholder="অপশন ১"
-                                class="p-2 rounded-lg bg-slate-900 border border-slate-600 text-sm">
-                            <input type="text" id="opt2" placeholder="অপশন ২"
-                                class="p-2 rounded-lg bg-slate-900 border border-slate-600 text-sm">
-                            <input type="text" id="opt3" placeholder="অপশন ৩"
-                                class="p-2 rounded-lg bg-slate-900 border border-slate-600 text-sm">
-                            <input type="text" id="opt4" placeholder="অপশন ৪"
-                                class="p-2 rounded-lg bg-slate-900 border border-slate-600 text-sm">
+                            <input type="text" id="opt1" placeholder="অপশন ১" class="p-2 rounded-lg bg-slate-900 border border-slate-600 text-sm">
+                            <input type="text" id="opt2" placeholder="অপশন ২" class="p-2 rounded-lg bg-slate-900 border border-slate-600 text-sm">
+                            <input type="text" id="opt3" placeholder="অপশন ৩" class="p-2 rounded-lg bg-slate-900 border border-slate-600 text-sm">
+                            <input type="text" id="opt4" placeholder="অপশন ৪" class="p-2 rounded-lg bg-slate-900 border border-slate-600 text-sm">
                         </div>
 
-                        <input type="text" id="q-ans" placeholder="সঠিক উত্তর"
-                            class="w-full p-3 rounded-xl bg-slate-900 border-l-4 border-green-500 outline-none">
+                        <input type="text" id="q-ans" placeholder="সঠিক উত্তর" class="w-full p-3 rounded-xl bg-slate-900 border-l-4 border-green-500 outline-none">
 
-                        <button onclick="saveQ()"
-                            class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 p-3 rounded-xl font-bold hover:scale-[1.02] transition shadow-lg">
-                            💾 সেভ করুন
-                        </button>
-                        <button onclick="clearQForm()"
-                            class="w-full bg-slate-600 p-2 rounded-lg text-xs hover:bg-slate-500 transition">
-                            নতুন প্রশ্ন (ক্লিন ফর্ম)
-                        </button>
+                        <button onclick="saveQ()" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 p-3 rounded-xl font-bold hover:scale-[1.02] transition shadow-lg">💾 সেভ করুন</button>
+                        <button onclick="clearQForm()" class="w-full bg-slate-600 p-2 rounded-lg text-xs hover:bg-slate-500 transition">নতুন প্রশ্ন (ক্লিন ফর্ম)</button>
                     </div>
 
                     <div id="q-list" class="mt-6 space-y-3 max-h-[400px] overflow-y-auto pr-2"></div>
                     <div class="flex justify-between items-center mt-6">
-                        <button onclick="deleteAllQuestions()"
-                            class="bg-gradient-to-r from-orange-500 to-red-600 px-4 py-2 rounded-lg text-xs font-bold hover:scale-105 transition shadow-md">
-                            সব মুছুন 🗑️
-                        </button>
+                        <button onclick="deleteAllQuestions()" class="bg-gradient-to-r from-orange-500 to-red-600 px-4 py-2 rounded-lg text-xs font-bold hover:scale-105 transition shadow-md">সব মুছুন 🗑️</button>
                     </div>
                 </div>
 
                 <div class="glass p-6 rounded-2xl shadow-xl border border-slate-700">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-bold text-red-400">📊 রেজাল্ট লগ</h2>
-                        <button onclick="resetReports()"
-                            class="bg-gradient-to-r from-red-500 to-pink-600 px-4 py-2 rounded-lg text-xs font-bold hover:scale-105 transition shadow-md">
-                            রিসেট সব
-                        </button>
+                        <button onclick="resetReports()" class="bg-gradient-to-r from-red-500 to-pink-600 px-4 py-2 rounded-lg text-xs font-bold hover:scale-105 transition shadow-md">রিসেট সব</button>
                     </div>
 
                     <div class="overflow-x-auto rounded-xl border border-slate-700">
@@ -212,27 +154,31 @@
             </div>
         </div>
     </div>
+
     <script>
-        // --- Authentication Logic ---
         const correctUsername = "Ibrahim9250";
         const correctPassword = "92500";
+        let allQuestions = [];
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            background: '#1e293b',
+            color: '#fff'
+        });
 
         function checkLogin() {
             const user = document.getElementById('admin-user').value;
             const pass = document.getElementById('admin-pass').value;
-
             if (user === correctUsername && pass === correctPassword) {
                 sessionStorage.setItem('isAdminLoggedIn', 'true');
                 showDashboard();
-                Toast.fire({ icon: 'success', title: 'লগইন সফল হয়েছে' });
+                Toast.fire({ icon: 'success', title: 'লগইন সফল হয়েছে' });
             } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'ভুল তথ্য',
-                    text: 'ইউজারনেম বা পাসওয়ার্ড সঠিক নয়!',
-                    background: '#1e293b',
-                    color: '#fff'
-                });
+                Swal.fire({ icon: 'error', title: 'ভুল তথ্য', text: 'ইউজারনেম বা পাসওয়ার্ড সঠিক নয়!', background: '#1e293b', color: '#fff' });
             }
         }
 
@@ -247,29 +193,9 @@
             location.reload();
         }
 
-        // Check session on load
         window.onload = () => {
-            if (sessionStorage.getItem('isAdminLoggedIn') === 'true') {
-                showDashboard();
-            }
+            if (sessionStorage.getItem('isAdminLoggedIn') === 'true') showDashboard();
         };
-
-        // --- Rest of your original Script ---
-        let allQuestions = [];
-
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            background: '#1e293b',
-            color: '#fff',
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        });
 
         async function loadData() {
             try {
@@ -282,30 +208,31 @@
 
                 document.getElementById('subject-input').value = settings.subject || "";
                 document.getElementById('notice-input').value = settings.notice || "";
+                document.getElementById('duration-input').value = settings.duration || "10"; // ডিফল্ট ১০ মিনিট
 
                 renderQuestions();
                 renderReports(reports);
-            } catch (e) {
-                console.error("ডেটা লোড করতে সমস্যা হয়েছে।");
-            }
+            } catch (e) { console.error("ডেটা লোড করতে সমস্যা হয়েছে।"); }
         }
 
         async function saveAllSettings() {
             const subject = document.getElementById('subject-input').value;
             const notice = document.getElementById('notice-input').value;
+            const duration = document.getElementById('duration-input').value;
 
             if (!subject) return Toast.fire({ icon: 'error', title: 'সাবজেক্টের নাম দিন' });
+            if (!duration || duration < 1) return Toast.fire({ icon: 'error', title: 'সঠিক সময় (মিনিট) দিন' });
 
             await fetch('/api/admin/save-settings', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ subject, notice })
+                body: JSON.stringify({ subject, notice, duration })
             });
 
             Swal.fire({
                 icon: 'success',
                 title: 'আপডেট সফল!',
-                text: 'সাবজেক্ট ও নোটিশ সেভ করা হয়েছে।',
+                text: 'সাবজেক্ট, সময় ও নোটিশ সেভ করা হয়েছে।',
                 background: '#1e293b',
                 color: '#fff',
                 confirmButtonColor: '#10b981'
@@ -316,7 +243,6 @@
             const total = reports.length;
             const cheatedCount = reports.filter(r => r.cheated).length;
             const avg = total > 0 ? (reports.reduce((acc, r) => acc + r.score, 0) / total).toFixed(1) : 0;
-
             document.getElementById('total-students').innerText = total;
             document.getElementById('total-cheated').innerText = cheatedCount;
             document.getElementById('avg-score').innerText = avg;
@@ -326,11 +252,9 @@
                     <td class="p-3 font-medium">${r.name}</td>
                     <td class="p-3 text-center font-bold ${r.cheated ? 'text-red-400' : 'text-blue-400'}">${r.score}</td>
                     <td class="p-3 text-center">
-                        ${r.cheated
-                    ? '<span class="px-3 py-1 bg-red-600/20 text-red-400 border border-red-500/30 text-[10px] rounded-full font-bold uppercase tracking-tighter">Cheated 🚩</span>'
-                    : '<span class="px-3 py-1 bg-green-600/20 text-green-400 border border-green-500/30 text-[10px] rounded-full font-bold uppercase tracking-tighter">Clear ✅</span>'}
+                        ${r.cheated ? '<span class="px-3 py-1 bg-red-600/20 text-red-400 border border-red-500/30 text-[10px] rounded-full font-bold uppercase tracking-tighter">Cheated 🚩</span>' : '<span class="px-3 py-1 bg-green-600/20 text-green-400 border border-green-500/30 text-[10px] rounded-full font-bold uppercase tracking-tighter">Clear ✅</span>'}
                     </td>
-                    <td class="p-3 text-right"><span class="text-[11px] text-slate-400">${r.time}</span></td>
+                    <td class="p-3 text-right text-[11px] text-slate-400">${r.time}</td>
                 </tr>`).join('');
         }
 
@@ -342,12 +266,8 @@
                         <p class="text-green-400">সঠিক উত্তর: ${q.answer}</p>
                     </div>
                     <div class="flex gap-2 shrink-0">
-                        <button onclick="editQ(${q.id})" class="p-1.5 bg-blue-500/20 text-blue-400 rounded hover:bg-blue-500 hover:text-white transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                        </button>
-                        <button onclick="delQ(${q.id})" class="p-1.5 bg-red-500/20 text-red-400 rounded hover:bg-red-500 hover:text-white transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                        </button>
+                        <button onclick="editQ(${q.id})" class="p-1.5 bg-blue-500/20 text-blue-400 rounded hover:bg-blue-500 hover:text-white transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg></button>
+                        <button onclick="delQ(${q.id})" class="p-1.5 bg-red-500/20 text-red-400 rounded hover:bg-red-500 hover:text-white transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
                     </div>
                 </div>`).join('');
         }
@@ -356,42 +276,21 @@
             const qText = document.getElementById('q-text').value;
             const qAns = document.getElementById('q-ans').value;
             if (!qText || !qAns) return Toast.fire({ icon: 'warning', title: 'প্রশ্ন এবং উত্তর উভয়ই প্রয়োজন' });
-
             const data = {
                 id: document.getElementById('q-id').value || null,
                 question: qText,
-                options: [
-                    document.getElementById('opt1').value,
-                    document.getElementById('opt2').value,
-                    document.getElementById('opt3').value,
-                    document.getElementById('opt4').value
-                ],
+                options: [document.getElementById('opt1').value, document.getElementById('opt2').value, document.getElementById('opt3').value, document.getElementById('opt4').value],
                 answer: qAns
             };
-
-            await fetch('/api/admin/save', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
+            await fetch('/api/admin/save', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
             Toast.fire({ icon: 'success', title: 'প্রশ্ন সেভ করা হয়েছে' });
-            clearQForm();
-            loadData();
+            clearQForm(); loadData();
         }
 
         async function handleCSVUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
-
-            Swal.fire({
-                title: 'আপলোড হচ্ছে...',
-                allowOutsideClick: false,
-                didOpen: () => Swal.showLoading(),
-                background: '#1e293b',
-                color: '#fff'
-            });
-
+            Swal.fire({ title: 'আপলোড হচ্ছে...', allowOutsideClick: false, didOpen: () => Swal.showLoading(), background: '#1e293b', color: '#fff' });
             const reader = new FileReader();
             reader.onload = async function (e) {
                 const text = e.target.result;
@@ -399,17 +298,8 @@
                 for (let row of rows) {
                     const cols = row.split(',');
                     if (cols.length >= 6) {
-                        const qData = {
-                            id: null,
-                            question: cols[0].trim(),
-                            options: [cols[1].trim(), cols[2].trim(), cols[3].trim(), cols[4].trim()],
-                            answer: cols[5].trim()
-                        };
-                        await fetch('/api/admin/save', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(qData)
-                        });
+                        const qData = { id: null, question: cols[0].trim(), options: [cols[1].trim(), cols[2].trim(), cols[3].trim(), cols[4].trim()], answer: cols[5].trim() };
+                        await fetch('/api/admin/save', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(qData) });
                     }
                 }
                 loadData();
@@ -419,61 +309,20 @@
         }
 
         async function delQ(id) {
-            Swal.fire({
-                title: 'নিশ্চিত তো?',
-                text: "প্রশ্নটি মুছে ফেলা হবে!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'হ্যাঁ, মুছুন',
-                cancelButtonText: 'বাতিল',
-                background: '#1e293b',
-                color: '#fff'
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    await fetch(`/api/admin/delete/${id}`, { method: 'DELETE' });
-                    loadData();
-                    Toast.fire({ icon: 'success', title: 'মুছে ফেলা হয়েছে' });
-                }
+            Swal.fire({ title: 'নিশ্চিত তো?', text: "প্রশ্নটি মুছে ফেলা হবে!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444', cancelButtonColor: '#64748b', confirmButtonText: 'হ্যাঁ, মুছুন', background: '#1e293b', color: '#fff' }).then(async (result) => {
+                if (result.isConfirmed) { await fetch(`/api/admin/delete/${id}`, { method: 'DELETE' }); loadData(); Toast.fire({ icon: 'success', title: 'মুছে ফেলা হয়েছে' }); }
             });
         }
 
         async function deleteAllQuestions() {
-            Swal.fire({
-                title: 'সব প্রশ্ন মুছবেন?',
-                text: "এটি আর ফিরে পাওয়া সম্ভব নয়!",
-                icon: 'error',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                confirmButtonText: 'হ্যাঁ, সব মুছুন!',
-                background: '#1e293b',
-                color: '#fff'
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    await fetch('/api/admin/delete-all-questions', { method: 'DELETE' });
-                    loadData();
-                    Swal.fire({ icon: 'success', title: 'সব প্রশ্ন ডিলিট হয়েছে', background: '#1e293b', color: '#fff' });
-                }
+            Swal.fire({ title: 'সব প্রশ্ন মুছবেন?', text: "এটি আর ফিরে পাওয়া সম্ভব নয়!", icon: 'error', showCancelButton: true, confirmButtonColor: '#ef4444', confirmButtonText: 'হ্যাঁ, সব মুছুন!', background: '#1e293b', color: '#fff' }).then(async (result) => {
+                if (result.isConfirmed) { await fetch('/api/admin/delete-all-questions', { method: 'DELETE' }); loadData(); Swal.fire({ icon: 'success', title: 'সব প্রশ্ন ডিলিট হয়েছে', background: '#1e293b', color: '#fff' }); }
             });
         }
 
         async function resetReports() {
-            Swal.fire({
-                title: 'রেজাল্ট রিসেট?',
-                text: "সব শিক্ষার্থীর রেকর্ড মুছে যাবে!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#f43f5e',
-                confirmButtonText: 'হ্যাঁ, রিসেট করুন',
-                background: '#1e293b',
-                color: '#fff'
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    await fetch('/api/admin/reset-reports', { method: 'DELETE' });
-                    loadData();
-                    Toast.fire({ icon: 'info', title: 'রেজাল্ট লগ খালি করা হয়েছে' });
-                }
+            Swal.fire({ title: 'রেজাল্ট রিসেট?', text: "সব শিক্ষার্থীর রেকর্ড মুছে যাবে!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#f43f5e', confirmButtonText: 'হ্যাঁ, রিসেট করুন', background: '#1e293b', color: '#fff' }).then(async (result) => {
+                if (result.isConfirmed) { await fetch('/api/admin/reset-reports', { method: 'DELETE' }); loadData(); Toast.fire({ icon: 'info', title: 'রেজাল্ট লগ খালি করা হয়েছে' }); }
             });
         }
 
@@ -488,7 +337,6 @@
                 document.getElementById('opt4').value = q.options[3];
                 document.getElementById('q-ans').value = q.answer;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                Toast.fire({ icon: 'info', title: 'এডিট মোড চালু' });
             }
         }
 
@@ -503,5 +351,4 @@
         }
     </script>
 </body>
-
 </html>

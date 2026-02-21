@@ -38,20 +38,22 @@ const Result = mongoose.model('Result', new mongoose.Schema({
 
 const Setting = mongoose.model('Setting', new mongoose.Schema({
     subject: { type: String, default: "সাধারণ পরীক্ষা" },
-    notice: { type: String, default: "" }
+    notice: { type: String, default: "" },
+    duration: { type: Number, default: 10 } // নতুন ফিল্ড: ডিফল্ট ১০ মিনিট
 }));
 
 // ================= API Routes =================
 
-// ১. সেটিংস পাওয়া
+// ১. সেটিংস পাওয়া
 app.get('/api/settings', async (req, res) => {
     try {
-        let s = await Setting.findOne() || await Setting.create({ subject: "সাধারণ পরীক্ষা", notice: "" });
+        // duration সহ সেটিংস লোড হবে
+        let s = await Setting.findOne() || await Setting.create({ subject: "সাধারণ পরীক্ষা", notice: "", duration: 10 });
         res.json(s);
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// ২. সব প্রশ্ন লোড (অ্যাডমিন ও ইউজার উভয়ের জন্য)
+// ২. সব প্রশ্ন লোড (অ্যাডমিন ও ইউজার উভয়ের জন্য)
 app.get('/api/admin/questions', async (req, res) => {
     try {
         const qs = await Question.find().sort({ id: 1 });
@@ -59,7 +61,7 @@ app.get('/api/admin/questions', async (req, res) => {
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// ৩. অ্যাডমিন রিপোর্টস/রেজাল্ট লগ পাওয়া
+// ৩. অ্যাডমিন রিপোর্টস/রেজাল্ট লগ পাওয়া
 app.get('/api/admin/reports', async (req, res) => {
     try {
         const reports = await Result.find().sort({ _id: -1 });
@@ -145,10 +147,15 @@ app.delete('/api/admin/reset-reports', async (req, res) => {
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// ১০. সেটিংস আপডেট
+// ১০. সেটিংস আপডেট (এখানে পরিবর্তন করা হয়েছে)
 app.post('/api/admin/save-settings', async (req, res) => {
     try {
-        await Setting.findOneAndUpdate({}, { subject: req.body.subject, notice: req.body.notice }, { upsert: true });
+        const { subject, notice, duration } = req.body;
+        await Setting.findOneAndUpdate({}, { 
+            subject: subject, 
+            notice: notice,
+            duration: Number(duration) // সময় আপডেট করা হচ্ছে
+        }, { upsert: true });
         res.json({ success: true });
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
